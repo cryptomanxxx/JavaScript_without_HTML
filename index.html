@@ -6,14 +6,26 @@
   <script type="text/javascript" src="JavaS.js"></script>
   <meta charset="utf-8" />
 
-<style>
+  <style>
+    #datamatrix,
+    td {
+      border-collapse: collapse;
+      border: 1px solid black;
+    }
 
-#datamatrix, td {
- border-collapse: collapse;
- border: 1px solid black;
-}
+    #inputbox {
+      background-color: lightblue;
+      width: 500px;
+      height: 500px;
+      border: none;
+    }
 
-</style> 
+    #outputbox {
+      background-color: pink;
+      width: 500px;
+      height: 500px;
+    }
+  </style>
 
 </head>
 
@@ -26,10 +38,9 @@
     </tr>
     <tr>
 
-      <td> <textarea id="inputbox" style="background-color:lightblue; width: 500px; height: 500px; border: none;"
-          onkeypress="process(event, this)"></textarea> </td>
+      <td> <textarea id="inputbox" onkeypress="process(event, this)"></textarea> </td>
       <td>
-        <div id="outputbox" style="background-color:pink; width: 500px; height: 500px;"></div>
+        <div id="outputbox" onClick="this.contentEditable='true';"></div>
       </td>
     </tr>
   </table>

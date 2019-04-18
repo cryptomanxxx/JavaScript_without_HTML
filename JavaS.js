@@ -18,9 +18,7 @@ function run() {
 function Matrix(d) {
     var data = d;
     var html = document.createElement('table');
-    html.setAttribute("border", "1");
-    html.style.borderCollapse = "collapse";
-
+    html.setAttribute("id", "datamatrix");
     for (var i = 0; i < data.length; i++) {
         html += '<tr>';
         for (var j = 0; j < data[i].length; j++) {

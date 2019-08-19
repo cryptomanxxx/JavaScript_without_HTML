@@ -3,6 +3,7 @@
 
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.1.0/math.min.js"></script>
   <script type="text/javascript" src="JavaS.js"></script>
   <meta charset="utf-8" />
 
@@ -33,14 +34,14 @@
 
   <table width="60%">
     <tr>
-      <th>JavaScript Input</th>
+      <th>JavaScript (Math.js) Input</th>
       <th>Output</th>
     </tr>
     <tr>
 
       <td> <textarea id="inputbox" onkeypress="process(event, this)"></textarea> </td>
       <td>
-        <div id="outputbox" onClick="this.contentEditable='true';"></div>
+        <textarea id="outputbox"></textarea>
       </td>
     </tr>
   </table>

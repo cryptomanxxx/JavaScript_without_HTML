@@ -1,31 +1,44 @@
 function process(e) {
-    var code = (e.keyCode ? e.keyCode : e.which);
-    if (code == 13) { //Enter keycode
-        run();
-    }
+  var code = (e.keyCode ? e.keyCode : e.which);
+  if (code == 13) { //Enter keycode
+    run();
+  }
 }
 
 function run() {
-    var input = document.getElementById('inputbox');
-    var output = eval(inputbox.value);
-    if (output == undefined) {
-        output = "";
+  var input = document.getElementById('inputbox');
+
+  var lines = input.value.split('\n')
+
+  var results = [];
+
+  var parser = math.parser();
+  for (var i = 0; i < lines.length; i++) {
+    var q = trim(lines[i])
+    if (q.length > 0) {
+      try {
+        results.push('= ' + math.format(parser.eval(q)));
+      }
+      catch (err) {
+        results.push(err.toString());
+      }
     }
-    $('#outputbox').append(output + "<br/>");
+    else {
+      results.push("");
+    }
+  }
+
+  var output = results.join('\n')
+  
+  $('#outputbox').val(output);
 }
 
-
-function Matrix(d) {
-    var data = d;
-    var html = document.createElement('table');
-    html.setAttribute("id", "datamatrix");
-    for (var i = 0; i < data.length; i++) {
-        html += '<tr>';
-        for (var j = 0; j < data[i].length; j++) {
-            html += '<td>' + data[i][j] + '</td>';
-        }
-        html += "</tr>";
-    }
-    $('#outputbox').append(html);
-
+/**
+ * Trim a string
+ * http://stackoverflow.com/a/498995/1262753
+ * @param str
+ * @return {*|void}
+ */
+function trim(str) {
+  return str.replace(/^\s+|\s+$/g, '');
 }

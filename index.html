@@ -1,45 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.1.0/math.min.js"></script>
   <script type="text/javascript" src="JavaS.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <meta charset="utf-8" />
-
-  <style>  
+  <style>
     #inputbox {
       background-color: lightblue;
       width: 500px;
       height: 500px;
       border: none;
     }
-
     #outputbox {
       background-color: pink;
       width: 500px;
       height: 500px;
+      border: none;
     }
-    
   </style>
-
 </head>
-
 <body>
-
   <table width="60%">
     <tr>
-      <th>JavaScript (Math.js) Input</th>
+      <th>User defined JavaScript functions</th>
       <th>Output</th>
     </tr>
     <tr>
-
-      <td> <textarea id="inputbox" onkeypress="process(event, this)"></textarea> </td>
-      <td>
-        <textarea id="outputbox"></textarea>
-      </td>
+      <td><textarea id="inputbox" onkeypress="get(event, this)"></textarea> </td>
+      <td><textarea id="outputbox"></textarea> </td>
     </tr>
   </table>
-
 </body>
-
 </html>

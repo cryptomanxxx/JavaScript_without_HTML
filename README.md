@@ -1,8 +1,8 @@
 # JavaScript_without_HTML
-Works with math.js as the moment but will be extended to work with all user defined java script functions in the future.  
-No need for a semicolon at the end of a javascript / math.js command because it will produce an error / empty JavaScript array []   
+A simple JavaScript command execution web editor where you can run your own user defined java script functions. I have at the moment created 3 simple functions that works just to show the basic concept: seq, sum and clear. You can fork or clone the code and write and add your own user defined JavaScript functions that you want to run in the web editor.        
 
-![new image](https://user-images.githubusercontent.com/48676920/63278139-032b3100-c2a7-11e9-8647-08097ddeafac.JPG)
+![github-new](https://user-images.githubusercontent.com/48676920/63473655-95cdfa80-c476-11e9-8c9b-0f5e1c1f4deb.JPG)
+
 
 
 

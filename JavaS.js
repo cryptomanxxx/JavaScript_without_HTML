@@ -1,27 +1,33 @@
-function countline(element) {
-  var text = $(element).val();
-  var lines = text.split("\n");
-  var count = 0;
-  for (var i = 0; i < lines.length - 1; i++) {
-    if (lines[i].trim() != "" && lines[i].trim() != null) {
-      count += 1;
+function setfocus() {
+  var input = document.getElementById('inputbox');
+  input.focus();
+}
+
+function parse(e) {
+  var key = window.event.keyCode;
+  if (key == 13) { //keycode for enter 
+    input = document.getElementById('inputbox');
+    output = eval(input.value);
+    var out = document.getElementById("outputbox").value
+    if (out == "" || out.length == 0 || out == null) {
+      document.getElementById("outputbox").value += output;
+    } else {
+      document.getElementById("outputbox").value += '\n' + output;
     }
   }
-  return count + 1;
 }
 
-function get(e) {
-  var code = (e.keyCode ? e.keyCode : e.which);
-  if (code == 13) { //Enter keycode
-    var input = document.getElementById('inputbox');
-    var output = eval(input.value);
-    count = countline(document.getElementById('inputbox'));
-    console.log("Calculation " + "number " + count + " = " + output);
-    document.getElementById("outputbox").innerHTML += output + '\n';
-  }
-}
+// clear the input and output boxes
+function clear() {
+  event.preventDefault();
+  input = "";
+  output = "";
+  document.getElementById('inputbox').value = "";
+  document.getElementById('outputbox').value = "";
+  return "";
+};
 
-// Gives you an array with data from a to b
+// gives you an array with data from a to b
 function seq(a, b) {
   var data = [];
   for (var i = a; i <= b; i++) {
@@ -30,7 +36,7 @@ function seq(a, b) {
   return data;
 }
 
-// Calculates the sum of a given array a
+// calculates the sum of a given array a
 function sum(a) {
   var z = 0;
   for (var i = 0; i < a.length; i++) {
@@ -38,10 +44,3 @@ function sum(a) {
   }
   return z;
 }
-
-// clears the input and output box
-function clear() {
-  document.getElementById('inputbox').value = "";
-  document.getElementById('outputbox').value = "";
-  return "";
-};

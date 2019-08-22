@@ -10,12 +10,14 @@
       width: 500px;
       height: 500px;
       border: none;
+      font-size: 15px;
     }
     #outputbox {
       background-color: pink;
       width: 500px;
       height: 500px;
       border: none;
+      font-size: 15px;
     }
   </style>
 </head>
@@ -26,9 +28,10 @@
       <th>Output</th>
     </tr>
     <tr>
-      <td><textarea id="inputbox" onkeypress="get(event, this)"></textarea> </td>
+      <td><textarea id="inputbox" onkeypress="parse(event, this)"></textarea> </td>
       <td><textarea id="outputbox"></textarea> </td>
     </tr>
   </table>
+  <script> setfocus(); </script>
 </body>
 </html>

@@ -43,4 +43,5 @@ function sum(a) {
 function clear() {
   document.getElementById('inputbox').value = "";
   document.getElementById('outputbox').value = "";
+  return "";
 };

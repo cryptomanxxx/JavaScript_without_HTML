@@ -1,5 +1,5 @@
 # JavaScript_without_HTML
-A simple JavaScript command execution web editor where you can run your own user defined JavaScript functions from. I have at the moment created 6 user defined functions (on top of the functions required to get the web editor to work) just to show the basic concept: 
+A basic JavaScript command execution web editor where you can run your own user defined JavaScript functions from. I have at the moment created 6 user defined functions (on top of the functions required to get the web editor to work) just to show the basic concept: 
 
 1) Function rand(n) which gives you a 1D array with length n with random numbers between -1 and 1.
 2) Function rw(n) which gives you a 1D array with length n with a pure random walk.

@@ -3,33 +3,42 @@
 <head>
   <script type="text/javascript" src="JavaS.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <meta charset="utf-8" />
   <style>
     #inputbox {
       background-color: lightblue;
-      width: 500px;
-      height: 500px;
+      width: 497px;
+      height: 350px;
       border: none;
       font-size: 15px;
     }
     #outputbox {
       background-color: pink;
-      width: 500px;
-      height: 500px;
+      width: 497px;
+      height: 350px;
       border: none;
       font-size: 15px;
     }
   </style>
 </head>
 <body>
-  <table width="60%">
+  <table>
     <tr>
-      <th>User defined JavaScript functions</th>
-      <th>Output</th>
+      <th>User defined JavaScript functions input</th>
+      <th>Command output</th>
     </tr>
     <tr>
-      <td><textarea id="inputbox" onkeypress="parse(event, this)"></textarea> </td>
-      <td><textarea id="outputbox"></textarea> </td>
+      <td> <textarea id="inputbox" onkeypress="parse(event, this)" style="overflow:auto"></textarea> </td>
+      <td> <textarea id="outputbox" style="overflow:auto"></textarea> </td>
+    </tr>
+    <tr>
+      <th colspan="2">Plot output </th>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div id="mydiv" style="height:380px; width:1000px; background-color: lightgrey;"> </div>
+      </td>
     </tr>
   </table>
   <script> setfocus(); </script>

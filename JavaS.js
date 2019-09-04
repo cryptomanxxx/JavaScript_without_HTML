@@ -21,7 +21,8 @@ function parse(e) {
 
     var cc = increment();
     console.log("cc = " + cc);
-    var out = document.getElementById("outputbox").value
+    var out = document.getElementById("outputbox").value; 
+    
     if (out == "" || out.length == 0 || out == null) {
       document.getElementById("count1").value += eval(cc + 1) + '\n';
       document.getElementById("count2").value = eval(cc);

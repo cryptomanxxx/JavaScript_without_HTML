@@ -83,63 +83,7 @@ function parse(e1, e2) {
   }
 }
 
-// function parse that can be experimented on 
-function parse2(e1, e2) {
-  console.log("e2 = " + e2);
-  if (e1.keyCode == 13) { // keycode for enter 
-    event.preventDefault();
-
-    try {
-      var inId = e2.id;
-      console.log("inId = " + inId);
-      outId = "output" + inId.substring(5);
-      console.log("outId = " + outId);
-
-      var inz = input.innerText;
-
-      // check if input contains a colon. Hides output if colon exist. 
-      if (inz.indexOf(':') > -1) {
-        var inz = input.innerText.replace(/:/g, '');
-        console.log("input with colon = " + inz);
-        var outz = eval(inz);
-        console.log("hidden out = " + outz);
-        CreateOutputDiv();
-        CreateInputDiv();
-      }
-      else { // no colon = display and revaluate input
-        if (document.getElementById(outId)) {
-          console.log("Already created");
-          inz = document.getElementById(inId).innerText;
-          console.log("inz = " + inz);
-          var outz = eval(inz);
-          console.log("outz = " + outz);
-          document.getElementById(outId).innerHTML = outz;
-
-          // set focus to the input after revalue input
-          var ref1 = 1 + + inId.substring(5);
-          var ref2 = "input" + ref1;
-          console.log("refocus = " + ref2);
-          document.getElementById(ref2).focus();
-        }
-        else { // no colon = display output and create new lines 
-          CreateOutputDiv();
-          // calculate and assign output value to output div  
-          // console.log("input = " + inz);
-          var outz = eval(inz);
-          output.innerHTML = outz;
-          CreateInputDiv();
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      output.innerHTML = err;
-      CreateInputDiv();
-
-    }
-  }
-}
-
-
+// gives you help regarding different functions
 function help() {
   var x =
     "1) Function help() gives you command help" + "<br>" +
@@ -265,7 +209,6 @@ function crypto(ticker) {
   return D2;
 }
 
-
 // plots a given data array z 
 function plot(z) {
 
@@ -300,7 +243,6 @@ function plot(z) {
   return ' ';
 
 }
-
 
 // clears the workspace
 function clear() {

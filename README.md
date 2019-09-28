@@ -11,7 +11,7 @@ A basic JavaScript command execution web editor where you can run your own user 
 8) Function crypto(ticker) gives you historial crypto currency price data for a specified ticker symbol string
 9) Function plot(z) gives you a plot of a 1D array z.
 10) Function clear() gives you a clean workspace
-11) Function save(x) where x is a file name string that ends with .html saves a html file of the current workspace session locally
+11) Function save(x) where x is a file name string that ends with .html (for example "workspace1.html" saves a html file of the current workspace session locally
 12) Function load() loads a html workspace file from a previous session
 
 Please also note that an input that ends with a colon : hiddes long output from view. 

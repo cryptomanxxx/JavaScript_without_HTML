@@ -20,4 +20,4 @@ Currently the colon notation does not work if you re-evaluate input by for examp
 
 You can fork or clone the code and write and add your own user defined JavaScript functions that you want to run in the web editor.
 
-![github](https://user-images.githubusercontent.com/48676920/64491557-3ccdd700-d26a-11e9-9419-5cae45e97e71.JPG)
+![github](https://user-images.githubusercontent.com/48676920/65815971-73a66580-e1f6-11e9-8814-0c2babd9706b.JPG)

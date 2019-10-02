@@ -14,7 +14,7 @@ A basic JavaScript command execution web editor where you can run your own user 
 11) Function save(x) where x is a file name string that ends with .html (for example "workspace1.html" saves a html file of the current workspace session locally
 12) Function load() loads a html workspace file from a previous session
 
-Please note that an input that ends with a colon : hiddes long output from view. 
+Please note that an input that ends with a colon : hiddes long output from view.
 Please note that an input that starts with # is defined as text.
 
 Currently the colon and text notation does not work if you re-evaluate input by for example putting in 5+5 and press enter and then go back and put in 5+5: or #5+5. It will unfortunatly give you errors. I will try to fix this or maybe someone can help me fix this?

@@ -32,13 +32,11 @@ function parse(e1, e2) {
   console.log("e2 = " + e2);
   if (e1.keyCode == 13) { // keycode for enter 
     event.preventDefault();
-
     try {
       var inId = e2.id;
       console.log("inId = " + inId);
       outId = "output" + inId.substring(5);
       console.log("outId = " + outId);
-
       var inz = input.innerText;
 
       // check if input contains a colon. Hides output if colon exist. 
@@ -50,35 +48,40 @@ function parse(e1, e2) {
         CreateOutputDiv();
         CreateInputDiv();
       }
-      else { // no colon = display and revaluate input
-        if (document.getElementById(outId)) {
-          console.log("Already created");
-          inz = document.getElementById(inId).innerText;
-          console.log("inz = " + inz);
-          var outz = eval(inz);
-          console.log("outz = " + outz);
-          document.getElementById(outId).innerHTML = outz;
+      // check if input contains a #. Input after a # is defined as text.  
+      else if (inz.indexOf('#') > -1) {
+        CreateOutputDiv();
+        CreateInputDiv();
+      }
+      // no colon and no # = display and revaluate input
+      else if (document.getElementById(outId)) {
+        console.log("Already created");
+        inz = document.getElementById(inId).innerText;
+        console.log("inz = " + inz);
+        var outz = eval(inz);
+        console.log("outz = " + outz);
+        document.getElementById(outId).innerHTML = outz;
 
-          // set focus to the input after revalue input
-          var ref1 = 1 + + inId.substring(5);
-          var ref2 = "input" + ref1;
-          console.log("refocus = " + ref2);
-          document.getElementById(ref2).focus();
-        }
-        else { // no colon = display output and create new lines 
-          CreateOutputDiv();
-          // calculate and assign output value to output div  
-          // console.log("input = " + inz);
-          var outz = eval(inz);
-          output.innerHTML = outz;
-          CreateInputDiv();
-        }
+        // set focus to the input after revalue input
+        var ref1 = 1 + + inId.substring(5);
+        var ref2 = "input" + ref1;
+        console.log("refocus = " + ref2);
+        document.getElementById(ref2).focus();
+      }
+      // no colon and no # = display output and create new lines
+      else {
+        CreateOutputDiv();
+        // calculate and assign output value to output div  
+        // console.log("input = " + inz);
+        var outz = eval(inz);
+        console.log("out = " + outz);
+        output.innerHTML = outz;
+        CreateInputDiv();
       }
     } catch (err) {
       console.log(err);
       output.innerHTML = err;
       CreateInputDiv();
-
     }
   }
 }
@@ -98,7 +101,8 @@ function help() {
     "10) Function clear() gives you a clean workspace" + "<br>" +
     "11) Function save(x) where x is a file name string that ends with .html saves a html file of the current workspace session locally" + "<br>" +
     "12) Function load() loads a html workspace file from a previous session" + "<br>" +
-    "13) Please also note that an input that ends with a colon : hiddes output from view" + "<br>";
+    "13) Please note that an input that ends with : hiddes output from view" + "<br>" +
+    "14) Please note that an input that starts with # is defined as text";
   return x;
 }
 

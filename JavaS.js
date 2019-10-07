@@ -28,23 +28,24 @@ function CreateOutputDiv() {
   document.getElementById('calc').appendChild(output);
 }
 
+// handles the input, output and does the expression parsing
 function parse(e1, e2) {
-  console.log("e2 = " + e2);
+  // console.log("e2 = " + e2);
   if (e1.keyCode == 13) { // keycode for enter 
     event.preventDefault();
-    try {
-      var inId = e2.id;
-      console.log("inId = " + inId);
-      outId = "output" + inId.substring(5);
-      console.log("outId = " + outId);
-      var inz = input.innerText;
+    var inId = e2.id;
+    console.log("inId = " + inId);
+    outId = "output" + inId.substring(5);
+    console.log("outId = " + outId);
+    var inz = input.innerText;
 
+    try {
       // check if input contains a colon. Hides output if colon exist. 
       if (inz.indexOf(':') > -1) {
         var inz = input.innerText.replace(/:/g, '');
         console.log("input with colon = " + inz);
         var outz = eval(inz);
-        console.log("hidden out = " + outz);
+        // console.log("hidden out = " + outz);
         CreateOutputDiv();
         CreateInputDiv();
       }
@@ -53,15 +54,25 @@ function parse(e1, e2) {
         CreateOutputDiv();
         CreateInputDiv();
       }
-      // no colon and no # = display and revaluate input
+      // revaluates input
       else if (document.getElementById(outId)) {
         console.log("Already created");
         inz = document.getElementById(inId).innerText;
         console.log("inz = " + inz);
-        var outz = eval(inz);
-        console.log("outz = " + outz);
+
+        // revaluated input contained hash or colon
+        var containedHashOrColon = true;
+        var outz = reparse(inz);
+
+        // revaluated input did not contained hash or colon
+        if (!outz) { outz = eval(inz); containedHashOrColon = false; }
+        // console.log("outz = " + outz);
         document.getElementById(outId).innerHTML = outz;
 
+        // check if contained colon or #  
+        if (containedHashOrColon) { document.getElementById(outId).hidden = true; } else {
+          document.getElementById(outId).hidden = false;
+        }
         // set focus to the input after revalue input
         var ref1 = 1 + + inId.substring(5);
         var ref2 = "input" + ref1;
@@ -72,9 +83,8 @@ function parse(e1, e2) {
       else {
         CreateOutputDiv();
         // calculate and assign output value to output div  
-        // console.log("input = " + inz);
         var outz = eval(inz);
-        console.log("out = " + outz);
+        // console.log("out = " + outz);
         output.innerHTML = outz;
         CreateInputDiv();
       }
@@ -86,24 +96,80 @@ function parse(e1, e2) {
   }
 }
 
+// does the re-evaluation of an input in function parse
+function reparse(inz) {
+  var outz;
+  if (inz.indexOf(':') > -1) {
+    inz = inz.replace(/:/g, '');
+    console.log("input with colon = " + inz);
+    outz = eval(inz);
+    console.log("hidden out = " + outz);
+  }
+  // check if input contains a #. Input after a # is defined as text.  
+  else if (inz.indexOf('#') > -1) {
+    outz = 0;
+  }
+  return outz != undefined ? true : false;
+}
+
 // gives you help regarding different functions
 function help() {
   var x =
     "1) Function help() gives you command help" + "<br>" +
-    "2) Function rand(n) gives you a 1D array with length n with random numbers between -1 and 1" + "<br>" +
-    "3) Function rw(n) gives you a 1D array with length n with a pure random walk" + "<br>" +
-    "4) Function seq(a,b) gives you a 1D array with data from a to b" + "<br>" +
-    "5) Function sum(a) gives you a sum of a 1D array a" + "<br>" +
-    "6) Function count(a,b) counts the number of elements b in array a. If parameter b is not specified then the count of a is return" + "<br>" +
-    "7) Function ticker() gives you the ticker symbols for the 100 crypto currencies with the largest market cap" + "<br>" +
-    "8) Function crypto(ticker) gives you historial crypto currency price data for a specified ticker symbol string" + "<br>" +
-    "9) Function plot(z) gives you a plot of a 1D array z." + "<br>" +
-    "10) Function clear() gives you a clean workspace" + "<br>" +
-    "11) Function save(x) where x is a file name string that ends with .html saves a html file of the current workspace session locally" + "<br>" +
-    "12) Function load() loads a html workspace file from a previous session" + "<br>" +
-    "13) Please note that an input that ends with : hiddes output from view" + "<br>" +
-    "14) Please note that an input that starts with # is defined as text";
+    "2) Function round(x,z) rounds a number, 1D array or a 2D array x to z decimal points" + "<br>" +
+    "3) Function array(z) returns a javascript array from function's parameters z" + "<br>" +
+    "4) Function arrayMult(d1,d2) multiply two arrays d1 and d2" + "<br>" +
+    "5) Function rand(n) returns a 1D array with length n with random numbers between -1 and 1" + "<br>" +
+    "6) Function rw(n) returns a 1D array with length n with a pure random walk" + "<br>" +
+    "7) Function seq(a,b) gives you a 1D array with data from a to b" + "<br>" +
+    "8) Function sum(a) gives you a sum of a 1D array a" + "<br>" +
+    "9) Function count(a,b) counts the number of elements b in array a. If parameter b is not specified then the count of a is return" + "<br>" +
+    "10) Function ticker() gives you the ticker symbols for the 100 crypto currencies with the largest market cap" + "<br>" +
+    "11) Function time(w) converts a unix timestamp w to a date string " + "<br>" +
+    "12) Function crypto(ticker) gives you historial crypto currency price data for a specified ticker symbol string" + "<br>" +
+    "13) Function plot(z) gives you a plot of a 1D array z." + "<br>" +
+    "14) Function clear() gives you a clean workspace" + "<br>" +
+    "15) Function save(x) where x is a file name that ends with .html in enclosed in a string will save a copy of the current workspace locally" + "<br>" +
+    "16) Function load() loads a html workspace file from a previous session" + "<br>" +
+    "Please note that an input that ends with : hiddes output from view" + "<br>" +
+    "Please note that an input that starts with # is defined as text";
   return x;
+}
+
+// rounds a number, a 1D or a 2D array array a to z decimal points
+function round(x,z) { 
+if (z == undefined) {z=2;}
+// console.log("type of = " + typeof(x)); 
+  if(typeof(x)=="number"){x=x.toFixed(z)}
+  else if (x[0].length == undefined) {
+    for (var i = 0; i < x.length; i++) {
+      x[i] = JSON.parse(x[i].toFixed(z));
+    }
+  } else
+    for (var i = 0; i < x.length; i++) {
+      for (var j = 0; j < x[0].length; j++) {
+        x[i][j]= JSON.parse(x[i][j].toFixed(z));
+      }
+    }
+  console.log(x); 
+  return x;
+}
+
+// returns a javascript array from a function's parameters (arguments)
+function array() {
+  var a = Array.from(arguments);
+  console.log(a);
+  return a;
+}
+
+// multiply two arrays 
+function arrayMult(d1, d2) {
+  var out = [];
+  for (var i = 0; i < d1.length; i++) {
+    out.push(d1[i] * d2[i]);
+  }
+  console.log(out);
+  return out;
 }
 
 // an array with random numbers between -1 and 1
@@ -112,8 +178,9 @@ function rand(n) {
   for (var i = 0; i < n; i++) {
     x[i] = Math.random() * 2 - 1;
   }
-  console.log("x = " + x);
-  return x;
+  var xx = round(x,4); 
+  // console.log(xx);
+  return xx;
 }
 
 // an array with a random walk 
@@ -123,7 +190,9 @@ function rw(n) {
   for (var i = 1; i < n; i++) {
     x[i] = x[i - 1] + (Math.random() * 2 - 1);
   }
-  return x;
+  var xx = round(x,2); 
+  // console.log(xx);
+  return xx;
 }
 
 // an array with data from a to b
@@ -132,9 +201,9 @@ function seq(a, b) {
   for (var i = a; i <= b; i++) {
     data.push(i);
   }
+  console.log(data);
   return data;
 }
-
 
 // calculates the sum of a given array a
 function sum(a) {
@@ -142,7 +211,9 @@ function sum(a) {
   for (var i = 0; i < a.length; i++) {
     z = z + a[i];
   }
-  return z;
+  var zz = round(z,2); 
+  console.log(zz); 
+  return zz; 
 }
 
 // counts the number of elements b in a given array a
@@ -157,12 +228,6 @@ function count(a, b) {
     }
   }
   return count;
-}
-
-function T(UNIX_timestamp) {
-  var MyDate = new Date(UNIX_timestamp * 1000);
-  var MyDateString = MyDate.getFullYear() + '-' + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-' + ('0' + MyDate.getDate()).slice(-2);
-  return JSON.stringify(MyDateString);
 }
 
 // ticker symbols for the 100 crypto currencies with the largest market cap
@@ -184,7 +249,15 @@ function ticker() {
   for (var i = 0; i < y.length; i++) {
     A.push([y[i].CoinInfo.Name]);
   }
+  console.log(A); 
   return A;
+}
+
+// converts a unix timestamp to a date string  
+function time(w) {
+  var MyDate = new Date(w * 1000);
+  var MyDateString = MyDate.getFullYear() + '-' + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-' + ('0' + MyDate.getDate()).slice(-2);
+  return JSON.stringify(MyDateString);
 }
 
 // historial crypto currency price data for a specified ticker symbol string
@@ -206,7 +279,7 @@ function crypto(ticker) {
   var D2 = [];
 
   for (var i = 0; i < y.length; i++) {
-    D1.push(T(y[i].time));
+    D1.push(time(y[i].time));
     D2.push(y[i].close);
   }
   console.log(D2);
@@ -234,8 +307,8 @@ function plot(z) {
   {
     width: 950,
     height: 300,
-    paper_bgcolor: 'LightBlue',
-    plot_bgcolor: 'LightBlue',
+    paper_bgcolor: 'lightblue',
+    plot_bgcolor: 'lightblue',
     margin: { l: 60, b: 60, r: 20, t: 20 },
     xaxis: { title: 'x-axis', titlefont: { family: 'Courier New, monospace', size: 18, color: 'black' } },
     yaxis: { title: 'y-axis', titlefont: { family: 'Courier New, monospace', size: 18, color: 'black' } },
@@ -250,12 +323,14 @@ function plot(z) {
 
 // clears the workspace
 function clear() {
-  event.preventDefault();
-  increment.n = 0;
-  var zz = document.getElementById('calc');
-  while (zz.firstChild) { zz.removeChild(zz.firstChild); };
-  console.clear();
-  return "";
+// event.preventDefault();
+// increment.n = 0;
+// var zz = document.getElementById('calc');
+// while (zz.firstChild) { zz.removeChild(zz.firstChild); };
+// console.clear();
+// return "";
+location.reload();
+return "" ;
 };
 
 // saves the current workspace to a local html file
@@ -273,9 +348,10 @@ function save(x) {
   downloadLink.style.display = "none";
   document.body.appendChild(downloadLink);
   downloadLink.click();
-  return "current workspace saved";
+  return "workspace saved";
 }
 
+// destroy temperary element 
 function destroyClickedElement(event) {
   document.body.removeChild(event.target);
 }
@@ -302,5 +378,5 @@ function load() {
     }
   }
   input.click();
-  return "loads a previous workspace";
+  return "";
 }

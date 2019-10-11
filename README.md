@@ -22,7 +22,7 @@ A basic JavaScript command execution web editor where you can run your own user 
 19) Function matrixMult(a,b) multiplies two matrices a and b
 20) Function matrixId(n) returns an identity matrix with n number of rows and columns.
 
-An input that ends with : hiddes output from view and an input that starts with # is defined as text
+An input that ends with : hiddes output from view and an input that starts with # is defined as text.
 Please note that matrix function does not currently work on an re-evaluated input line. I will try to solve this problem.  
 
 You can fork or clone the code and write and add your own user defined JavaScript functions that you want to run in the web editor.

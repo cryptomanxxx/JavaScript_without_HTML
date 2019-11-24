@@ -1,27 +1,82 @@
-// displays a html table and returns a 2D array
+// displays a html table and returns a 1D or 2D array
 function matrix(z) {
-  var table = document.createElement('table');
-  table.setAttribute("class", "matrix");
-  var tableBody = document.createElement('tbody');
-  z.forEach(function (rowData) {
-    var row = document.createElement('tr');
-    rowData.forEach(function (cellData) {
-      var cell = document.createElement('td');
-      cell.appendChild(document.createTextNode(cellData));
-      row.appendChild(cell);
-    });
+  if (z[0].length == undefined) { // 1D array 
+    var table = document.createElement('table');
+    table.setAttribute("class", "matrix");
+    var tableBody = document.createElement('tbody');
+    var row = document.createElement("tr");
     tableBody.appendChild(row);
-  });
-  table.appendChild(tableBody);
+    for (var i = 0; i < z.length; i++) {
+      var cell = document.createElement("td");
+      var cellText = document.createTextNode(z[i]);
+      cell.appendChild(cellText);
+      row.appendChild(cell);
+    }
+    table.appendChild(tableBody);
+  } else { // 2D array 
+    var table = document.createElement('table');
+    table.setAttribute("class", "matrix");
+    var tableBody = document.createElement('tbody');
+    z.forEach(function (rowData) {
+      var row = document.createElement('tr');
+      rowData.forEach(function (cellData) {
+        var cell = document.createElement('td');
+        cell.appendChild(document.createTextNode(cellData));
+        row.appendChild(cell);
+      });
+      tableBody.appendChild(row);
+    });
+    table.appendChild(tableBody);
+  }
+  document.getElementById(outId).innerHTML = table.outerHTML;
+  toggleOrCheckIfFunctionCall(true);
   console.log(z);
-  output.innerHTML = table.outerHTML;
   return z;
+}
+
+// multiply two matricies a and b
+function matrixMult(a, b) {
+  var data = [];  // maybe change this to array of array 
+  console.log("a.length = " + a.length); 
+  console.log("a[0].length = " + a[0].length); 
+  console.log("b.length = " + b.length); 
+  console.log("b[0].length = " + b[0].length); 
+
+  // if a is a 1D row array and b is a 1D column array
+  if (a.length == 1 && b[0].length == 1) {
+    for (var i = 0; i < a[0].length; i++) { data[i] = a[0][i] * b[i][0]; }
+  }
+  // if a is a 1D column array and b is a 1D row array
+  else if (a[0].length == 1 && b.length == 1) { 
+    for (var i = 0; i < a.length; i++) { data[i] = a[i][0] * b[0][i]; }
+  }
+  // if a is a 1D column array and b is a 1D column array 
+  else if (a[0].length == 1 && b[0].length == 1) {
+    for (var i = 0; i < a.length; i++) { data[i] = a[i][0] * b[i][0]; }
+  }
+  // if a is a 1D row array and b is a 1D row array
+  else if (a.length == 1 && b.length == 1) { 
+    for (var i = 0; i < a[0].length; i++) { data[i] = a[0][i] * b[0][i]; }
+  }
+  // if a is a 2D array and b is a 2D array 
+  else {
+    for (var r = 0; r < a.length; ++r) {
+      data[r] = new Array(b[0].length); // initialize the current row
+      for (var c = 0; c < b[0].length; ++c) {
+        data[r][c] = 0;             // initialize the current cell
+        for (var i = 0; i < a[0].length; ++i) {
+          data[r][c] += a[r][i] * b[i][c];
+        }
+      }
+    }
+  }
+  return matrix(round(data));
 }
 
 // calculates the inverse of matrix m with gaussian elimination 
 function matrixInv(m) {
-  //if the matrix isn't square: exit (error)
-  if (m.length !== m[0].length) { return; }
+  // if the matrix isn't square: exit (error)
+  if (m.length !== m[0].length) { return "not a square matrix"; }
 
   //create the identity matrix (I), and a copy (C) of the original
   var i = 0, ii = 0, j = 0, dim = m.length, e = 0, t = 0;
@@ -101,24 +156,6 @@ function matrixInv(m) {
   return matrix(round(I, 2));
 }
 
-// multiply two matricies
-function matrixMult(a, b) {
-  var aNumRows = a.length, aNumCols = a[0].length,
-    bNumRows = b.length, bNumCols = b[0].length,
-    m = new Array(aNumRows);  // initialize array of rows
-  for (var r = 0; r < aNumRows; ++r) {
-    m[r] = new Array(bNumCols); // initialize the current row
-    for (var c = 0; c < bNumCols; ++c) {
-      m[r][c] = 0;             // initialize the current cell
-      for (var i = 0; i < aNumCols; ++i) {
-        m[r][c] += a[r][i] * b[i][c];
-      }
-    }
-  }
-  var d = round(m, 2);
-  return matrix(d);
-}
-
 // creates an identity matrix with n number of rows and columns
 function matrixId(n) {
   var data = Array.from(Array(n), () => new Array(n));
@@ -131,46 +168,55 @@ function matrixId(n) {
   return matrix(data);
 }
 
-// returns the maximum value of an array
-function max(array) {
-  return Math.max.apply(null, array);
+// returns the maximum value of an array a
+function max(a) {
+  return Math.max.apply(null, a);
 }
 
-// returns the minimum value of an array
-function min(array) {
-  return Math.min.apply(null, array);
+// returns the minimum value of an array a
+function min(a) {
+  return Math.min.apply(null, a);
 }
 
-// calculates the range of an array
-function range(array) {
-  return max(array) - min(array);
+// calculates the range of an array a
+function range(a) {
+  return max(a) - min(a);
 }
 
-// calculates the median of an array
-function median(array) {
-  array.sort(function (a, b) { return a - b; });
-  var mid = array.length / 2;
-  return mid % 1 ? array[mid - 0.5] : (array[mid - 1] + array[mid]) / 2;
+// calculates the median of an array a
+function median(a) {
+  a.sort(function (a, b) { return a - b; });
+  var mid = a.length / 2;
+  return mid % 1 ? a[mid - 0.5] : (a[mid - 1] + a[mid]) / 2;
 }
 
-// calculates the sum of a given array
-function sum(array) {
-  var z = 0;
-  for (var i = 0; i < array.length; i++) {
-    z = z + array[i];
+// calculates the sum of a given array a 
+function sum(a) {
+  var z = 0 ;
+  if (a.length == 1) {   // a is a 1D row array
+    for (var j = 0; j < a[0].length; j++) {z = z + a[0][j]; }
   }
-  console.log(z);
-  return z;
+  else if (a[0].length == 1) {   // a is a 1D column array
+   console.log("column array"); 
+    for (var i = 0; i < a.length; i++) {z = z + a[i][0]; }
+  }
+  else {
+    for (var j = 0; j < a.length; j++) {z = z + a[j]; }
+  } 
+  toggleOrCheckIfFunctionCall(false);  
+  return round(z,2);
 }
 
 // calculates the expected value (arithmetic mean) of an array
-function ex(array) {
-  return sum(array) / array.length;
-};
+function ev(a) {
+if(a.length == 1){return round(sum(a) / a[0].length,4);} // a is a row array
+if(a[0].length == 1){return round(sum(a) / a.length,4);} // a is a column array
+if(a[0].length == undefined){return round(sum(a) / a.length,4);}
+}
 
 // calculates the sum of squared errors (sse) of an array
 function sse(array) {
-  var mean = ex(array);
+  var mean = ev(array);
   var sum = 0;
   var i = array.length;
   var tmp;
@@ -195,8 +241,8 @@ function stdev(array, flag) {
 
 // calculates the covariance of two arrays
 function covariance(array1, array2) {
-  var u = ex(array1);
-  var v = ex(array2);
+  var u = ev(array1);
+  var v = ev(array2);
   var arr1Len = array1.length;
   var sq_dev = new Array(arr1Len);
   for (var i = 0; i < arr1Len; i++)
@@ -210,45 +256,54 @@ function coeffvar(array) {
 };
 
 // calculates the pearson's correlation coefficient
-function corr(array1, array2) {
+function correlation(array1, array2) {
   return round(covariance(array1, array2) / stdev(array1, 1) / stdev(array2, 1));
 };
 
-// gives you help regarding different functions. Add all the above functions to help
-function help() {
-  var x =
-    "1) Function help() gives you command help" + "<br>" +
-    "2) Function round(x,z) rounds a number, 1D array or a 2D array x to z decimal points" + "<br>" +
-    "3) Function array(z) returns a javascript array from function's parameters z" + "<br>" +
-    "4) Function arrayMult(d1,d2) multiply two arrays d1 and d2" + "<br>" +
-    "5) Function rand(n) returns a 1D array with length n with random numbers between -1 and 1" + "<br>" +
-    "6) Function rw(n) returns a 1D array with length n with a pure random walk" + "<br>" +
-    "7) Function seq(a,b) gives you a 1D array with data from a to b" + "<br>" +
-    "8) Function count(a,b) counts the number of elements b in array a. If parameter b is not specified then the count of a is return" + "<br>" +
-    "9) Function ticker() gives you the ticker symbols for the 100 crypto currencies with the largest market cap" + "<br>" +
-    "10) Function time(w) converts a unix timestamp w to a date string " + "<br>" +
-    "11) Function crypto(ticker) gives you historial crypto currency price data for a specified ticker symbol string" + "<br>" +
-    "12) Function plot(z) gives you a plot of a 1D array z." + "<br>" +
-    "13) Function clear() gives you a clean workspace" + "<br>" +
-    "14) Function save(x) where x is a file name that ends with .html in enclosed in a string will save a copy of the current workspace locally" + "<br>" +
-    "15) Function load() loads a html workspace file from a previous session" + "<br>" +
-    "16) Function matrix(z) creates and displays a html table from a 2D array z and returns z" + "<br>" +
-    "17) Function matrixInv(m) calculates the inverse of matrix m with gaussian elimination " + "<br>" +
-    "18) Function matrixMult(a,b) multiplies two matrices a and b" + "<br>" +
-    "19) Function matrixId(n) returns an identity matrix with n number of rows and columns" + "<br>" +
-    "20) Function max(array) returns the maximum value of an array" + "<br>" +
-    "21) Function min(array) returns the minimum value of an array" + "<br>" +
-    "22) Function range(array) calculates the range (max - min) of an array" + "<br>" +
-    "23) Function median(array) calculates the median of an array" + "<br>" +
-    "24) Function sum(array) calculates the sum of a given array" + "<br>" +
-    "25) Function ex(array) calculates the expected value (arithmetic mean) of an array" + "<br>" +
-    "26) Function sse(array) calculates the sum of squared errors (sse) of an array" + "<br>" +
-    "27) Function variance(array, flag) calculates the variance of an array. If flag = 0 then population. If flag = 1 then sample" + "<br>" +
-    "28) Function stdev(array, flag) calculates the standard deviation of an array. If flag = 0 then population. If flag = 1 then sample" + "<br>" +
-    "29) Function covariance(array1, array2) calculates the covariance of two arrays" + "<br>" +
-    "30) Function coeffvar(array) calculates the coefficient of variation for an array" + "<br>" +
-    "31) Function corr(array1, array2) calculates the pearson's correlation coefficient for two arrays" + "<br>" +
-    "Please note that an input that ends with : hiddes output from view" + "<br>" +
-    "Please note that an input that starts with # is defined as text";
-  return x;
+// gives you a specific column c from a 2D array a
+function getColumn(a, c) {
+  var column = Array.from(Array(a.length), () => new Array(1));
+  for (var i = 0; i < a.length; i++) {
+    column[i][0] = a[i][c - 1];
+  }
+  return matrix(column);
+}
+
+// gives you a specific row r from a 2D array a
+function getRow(a, r) {
+  console.log(a[0].length);
+  var row = [];
+  for (var j = 0; j < a[0].length; j++) {
+    row.push(a[r - 1][j]);
+  }
+  return matrix(row);
+}
+
+// gives you the transpose of a 1D row array, a 1D column array or a 2D array a
+function transpose(a) {
+  console.log("a.length = " + a.length); 
+  console.log("a[0].length = " + a[0].length); 
+
+  if (a[0].length == undefined) { // a is a 1D row array
+    var data = Array.from(Array(a.length), () => new Array(1));
+    for (var j = 0; j < a.length; j++) {
+      data[j][0] = a[j];
+    }
+  } else if (a[0].length == 1) { // a is a 1D column array
+    var data = [];
+    for (var i = 0; i < a.length; i++) {
+      data[i] = a[i][0];
+    }
+  } else { // a is a 2D array
+    var data = [];
+    for (var j = 0; j < a[0].length; j++) {
+      data[j] = Array(a.length);
+    }
+    for (var i = 0; i < a.length; i++) {
+      for (var j = 0; j < a[0].length; j++) {
+        data[j][i] = a[i][j];
+      }
+    }
+  }
+  return matrix(data);
 }

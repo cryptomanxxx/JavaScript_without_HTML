@@ -4,6 +4,14 @@ function increment() {
   return ++increment.n;
 }
 
+// output has been assigned previously
+function toggleOrCheckIfFunctionCall(newValue) {
+  if (newValue != undefined || newValue != null) {
+    isFunctionCall = newValue || false;
+  }
+  return isFunctionCall;
+}
+
 // creates an input div
 function CreateInputDiv() {
   increment();
@@ -15,6 +23,7 @@ function CreateInputDiv() {
   input.setAttribute("contenteditable", "true");
   input.setAttribute("onkeypress", "parse(event, this)");
   document.getElementById('calc').appendChild(input);
+  console.log("input" + cc + " div created");
   input.focus();
 }
 
@@ -25,91 +34,108 @@ function CreateOutputDiv() {
   output.setAttribute("class", "output");
   output.setAttribute("contenteditable", "false");
   document.getElementById('calc').appendChild(output);
+  console.log("output" + cc + " div created");
 }
 
 // handles the input, output and does the expression parsing
 function parse(e1, e2) {
-  // console.log("e2 = " + e2);
   if (e1.keyCode == 13) { // keycode for enter 
     event.preventDefault();
-    var inId = e2.id;
+    inId = e2.id;
     console.log("inId = " + inId);
+    var inz = document.getElementById(inId).innerText;
     outId = "output" + inId.substring(5);
+    toggleOrCheckIfFunctionCall(false);
     console.log("outId = " + outId);
-    var inz = input.innerText;
-
-    try { // check if input contains a colon. Hides output if colon exist. 
-      if (inz.indexOf(':') > -1) {
-        var inz = input.innerText.replace(/:/g, '');
-        console.log("input with colon = " + inz);
-        var outz = eval(inz);
-        // console.log("hidden out = " + outz);
+    try {
+      // if 1 = a output div does not exist (new input line) and the input does not contain a # or colon 
+      if (!document.getElementById(outId) && inz.indexOf('#') == -1 && inz.indexOf(':') == -1) {
         CreateOutputDiv();
+        console.log("new input if 1 = " + inz);
+        let result = eval(inz);
+        if(!toggleOrCheckIfFunctionCall())
+        document.getElementById(outId).innerHTML = result;
         CreateInputDiv();
       }
-      // check if input contains a #. Input after a # is defined as text.  
-      else if (inz.indexOf('#') > -1) {
+      // if 2 = a output div does not exist (new input line) and the input contains a # = text input   
+      else if (!document.getElementById(outId) && inz.indexOf('#') > -1) {
+        console.log("new input line with hash if 2");
         CreateOutputDiv();
+        document.getElementById(outId).hidden = true;
         CreateInputDiv();
       }
-      // revaluates input
-      else if (document.getElementById(outId)) {
-        console.log("Already created");
-        inz = document.getElementById(inId).innerText;
-        console.log("inz = " + inz);
+      // if 3 = a output div does not exist (new input line) and the input contains a colon = hide output from view 
+      else if (!document.getElementById(outId) && inz.indexOf(':') > -1) {
+        var inz = inz.replace(/:/g, '');
+        console.log("new input line with colon if 3 = " + inz);
+        outz = eval(inz);
+        CreateOutputDiv();
+        document.getElementById(outId).hidden = true;
+        CreateInputDiv();
+      }
+      // if 4 = a output div exist (re-evaluated input) and the input does not contain a # or colon 
+      else if (document.getElementById(outId) && inz.indexOf('#') == -1 && inz.indexOf(':') == -1) {
+        console.log("re-evaluated input without colon or hash if 4 = " + inz);
+        document.getElementById(outId).hidden = false;
+        let result = eval(inz);
+        if(!toggleOrCheckIfFunctionCall())
+        document.getElementById(outId).innerHTML = result;
 
-        // revaluated input contained hash or colon
-        var containedHashOrColon = true;
-        var outz = reparse(inz);
+        // set focus to the input after revalue input line
+        var ref1 = 1 + + inId.substring(5);
+        var ref2 = "input" + ref1;
 
-        // revaluated input did not contained hash or colon
-        if (!outz) { outz = eval(inz); containedHashOrColon = false; }
-        // console.log("outz = " + outz);
-        document.getElementById(outId).innerHTML = outz;
+        // if an input div does not exist then create one = try and catch error will not work without this line
+        if(!document.getElementById(ref2)){CreateInputDiv();} 
+ 
+        console.log("refocus = " + ref2);
+        document.getElementById(ref2).focus();
+      }
+      // if 5 = a output div exist (re-evaluated input) and the input contains a # = text input 
+      else if (document.getElementById(outId) && inz.indexOf('#') > -1) {
+        document.getElementById(outId).hidden = true;
+        console.log("re-evaluated input with hash if 5");
 
-        // check if contained colon or #  
-        if (containedHashOrColon) { document.getElementById(outId).hidden = true; } else {
-          document.getElementById(outId).hidden = false;
-        }
-        // set focus to the input after revalue input
+        // set focus to the input after revalue input line
         var ref1 = 1 + + inId.substring(5);
         var ref2 = "input" + ref1;
         console.log("refocus = " + ref2);
         document.getElementById(ref2).focus();
       }
-      // no colon and no # = display output and create new lines
-      else {
-        CreateOutputDiv();
-        // calculate and assign output value to output div     
-        var outz = eval(inz);
-        // check if input contains a matrix input   
-        if (inz.indexOf('matrix') == -1) {
-          output.innerHTML = outz;
-        }
-        CreateInputDiv();
+      // if 6 = a output div exist (re-evaluated input) and the input contains a colon =  hide output from view 
+      else if (document.getElementById(outId) && inz.indexOf(':') > -1) {
+        document.getElementById(outId).hidden = true;
+        var inz = inz.replace(/:/g, '');
+        console.log("new input line with colon if 6 = " + inz);
+        outz = eval(inz);
+
+        // set focus to the input after revalue input line
+        var ref1 = 1 + + inId.substring(5);
+        var ref2 = "input" + ref1;
+        console.log("refocus = " + ref2);
+        document.getElementById(ref2).focus();
       }
-    } catch (err) {
-      console.log(err);
-      output.innerHTML = err;
-      CreateInputDiv();
+    }
+    catch (err) {
+      console.log("err = " + err);
+      console.log("error = " + outId);
+      document.getElementById(outId).innerHTML = err;
     }
   }
 }
 
-// does the re-evaluation of an input in function parse
-function reparse(inz) {
-  var outz;
-  if (inz.indexOf(':') > -1) {
-    inz = inz.replace(/:/g, '');
-    console.log("input with colon = " + inz);
-    outz = eval(inz);
-    console.log("hidden out = " + outz);
+// a random numbers between -1 and 1 with dimensions n1 and n2 and expected value e
+function rand(n1,n2,e) {
+  if (e == undefined) { e = 0; }
+  if (n1 == undefined && n2 == undefined) { return Math.random() * 2 - 1; }
+  var data = Array.from(Array(n1),() => new Array(n2)); 
+  // benefit from creating array this way is a.length = number of rows and a[0].length = number of columns 
+  for (var i = 0; i < n1; i++) {
+  for (var j = 0; j < n2; j++) {
+    data[i][j] = e + Math.random() * 2 - 1;
   }
-  // check if input contains a #. Input after a # is defined as text.  
-  else if (inz.indexOf('#') > -1) {
-    outz = 0;
   }
-  return outz != undefined ? true : false;
+  return round(data,5);
 }
 
 // rounds a number, a 1D or a 2D array array x to z decimal points
@@ -117,70 +143,50 @@ function round(x, z) {
   if (z == undefined) { z = 2; }
   console.log("type of = " + typeof (x));
   if (typeof (x) == "number") { x = x.toFixed(z) }
-  else if (x[0].length == undefined) {
+  else if (x[0].length == undefined) { // 1D array
     for (var i = 0; i < x.length; i++) {
-      x[i] = JSON.parse(x[i].toFixed(z));
+      x[i] = parseFloat(x[i].toFixed(z));
     }
   } else
-    for (var i = 0; i < x.length; i++) {
+    for (var i = 0; i < x.length; i++) { // 2D array 
       for (var j = 0; j < x[0].length; j++) {
-        JSON.parse(x[i][j] = x[i][j].toFixed(z));
+        x[i][j] = parseFloat(x[i][j].toFixed(z));
       }
     }
   return x;
 }
 
-// returns a javascript array from a function's parameters (arguments)
+// creates an array from the functions's parameters 
 function array() {
-  var data = Array.from(arguments);
-  console.log(data);
-  // var a = document.createElement('table');
-  // a.setAttribute("class", "array");
-  output.innerHTML = '[' + data + ']';
-  return data;
+n = arguments.length; 
+console.log("n = " + n);  
+var data = Array.from(Array(1),() => new Array(n));
+// the benefit from creating array this way is a.length = number of rows and a[0].length = number of columns  
+for (var i = 0; i < n; i++) { data[0][i] = arguments[i];}
+return matrix(data); 
 }
 
-// multiply two arrays 
-function arrayMult(d1, d2) {
-  var out = [];
-  for (var i = 0; i < d1.length; i++) {
-    out.push(d1[i] * d2[i]);
-  }
-  console.log(out);
-  return out;
-}
-
-// an array with random numbers between -1 and 1
-function rand(n) {
-  x = [];
-  for (var i = 0; i < n; i++) {
-    x[i] = Math.random() * 2 - 1;
-  }
-  var xx = round(x, 4);
-  console.log(xx);
-  return xx;
-}
-
-// an array with a random walk 
-function rw(n) {
+// an array with a random walk with expected value ex 
+function rw(n,ex) {
+  if (ex == undefined) { ex = 0; }
   var x = [];
   x[0] = 100;
   for (var i = 1; i < n; i++) {
-    x[i] = x[i - 1] + (Math.random() * 2 - 1);
+    x[i] = ex + x[i - 1] + Math.random() * 2 - 1;
   }
   var xx = round(x, 2);
   console.log(xx);
-  return xx;
+  return xx; 
 }
 
 // an array with data from a to b
 function seq(a, b) {
-  var data = [];
-  for (var i = a; i <= b; i++) {
-    data.push(i);
+  var data = Array.from(Array(1),() => new Array(b-a+1));
+  // the benefit from creating array this way is a.length = number of rows and a[0].length = number of columns  
+  for (var i = 0; i < data[0].length; i++) {
+    data[0][i]= a + i;
   }
-  console.log(data);
-  return data;
+  return matrix(data);
 }
 
 // counts the number of elements b in a given array a
@@ -228,9 +234,9 @@ function time(w) {
 }
 
 // historial crypto currency price data for a specified ticker symbol string
-function crypto(ticker) {
+function crypto(t) {
   var ApiKey = "ddd85b386e1a7c889e468a4933f75f22f52b0755b747bdb637ab39c88a3bc19b";
-  var urlA = "https://min-api.cryptocompare.com/data/histoday?fsym=" + ticker + "&tsym=USD&limit=1000&api_key=" + ApiKey;
+  var urlA = "https://min-api.cryptocompare.com/data/histoday?fsym=" + t + "&tsym=USD&limit=1000&api_key=" + ApiKey;
 
   var result = null;
 
@@ -255,21 +261,18 @@ function crypto(ticker) {
 
 // plots a given data array z 
 function plot(z) {
-
+  document.getElementById(outId).innerHTML = "";
   var yy = z;
   var xx = [];
-
   for (var i = 0; i <= yy.length; i++) {
     xx[i] = JSON.stringify(i);
   }
-
   var data = [{
     x: xx,
     y: yy,
     type: 'scatter',
     line: { color: 'green', width: 2 }
   }];
-
   var layout =
   {
     width: 950,
@@ -282,10 +285,8 @@ function plot(z) {
     xaxis: { tickfont: { size: 12, color: 'black' }, showgrid: true, gridcolor: 'black', linecolor: 'black' },
     yaxis: { tickfont: { size: 12, color: 'black' }, showgrid: true, gridcolor: 'black', linecolor: 'black' }
   };
-
-  setTimeout(function () { Plotly.newPlot(outId, data, layout, { displayModeBar: false, staticPlot: true }); }, 10);
-  return ' ';
-
+  toggleOrCheckIfFunctionCall(true);
+  Plotly.newPlot(outId, data, layout, { displayModeBar: false, staticPlot: true });
 }
 
 // clears the workspace
@@ -295,8 +296,9 @@ function clear() {
   var zz = document.getElementById('calc');
   while (zz.firstChild) { zz.removeChild(zz.firstChild); };
   console.clear();
+  CreateInputDiv(); 
   return "";
-};
+}
 
 // saves the current workspace to a local html file
 function save(x) {
@@ -313,7 +315,7 @@ function save(x) {
   downloadLink.style.display = "none";
   document.body.appendChild(downloadLink);
   downloadLink.click();
-  return "workspace saved";
+  return "";
 }
 
 // destroy temperary element 
@@ -339,5 +341,5 @@ function load() {
     }
   }
   input.click();
-  return "workspace loaded";
+  return "";
 }

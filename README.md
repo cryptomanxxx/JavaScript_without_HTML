@@ -36,8 +36,8 @@ A basic JavaScript command execution web editor where you can run your own user 
 33) Function getRow(a,r) gives you a specific row r from a 2D array a
 34) Function transpose(a) gives you the transpose of a 1D row array, a 1D column array or a 2D array a
 
-Please note that an input that ends with : hiddes output from view
-Please note that an input that starts with # is defined as text  
+Please note that an input that ends with : hiddes output from view.
+Please note that an input that starts with # is defined as text.  
 
 You can fork or clone the code and write and add your own user defined JavaScript functions that you want to run in the web editor.
 ![github](https://user-images.githubusercontent.com/48676920/65815971-73a66580-e1f6-11e9-8814-0c2babd9706b.JPG)

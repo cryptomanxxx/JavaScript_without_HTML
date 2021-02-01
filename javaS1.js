@@ -135,7 +135,7 @@ function rand(n1,n2,e) {
     data[i][j] = e + Math.random() * 2 - 1;
   }
   }
-  return round(data,5);
+  return round(data,10);
 }
 
 // rounds a number, a 1D or a 2D array array x to z decimal points

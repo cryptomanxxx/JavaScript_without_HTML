@@ -35,6 +35,10 @@ A basic JavaScript command execution web editor where you can run your own user 
 32) Function getColumn(a,c) gives you a specific column c from a 2D array a
 33) Function getRow(a,r) gives you a specific row r from a 2D array a
 34) Function transpose(a) gives you the transpose of a 1D row array, a 1D column array or a 2D array a
+35) Function LS(a,b) solves the least square equation for a 2D array a and a 1D column array b with matrix algebra
+36) Function SHA256(s) returns the hash of a string s using the SHA-256 cryptographic hash algorithm
+37) Function nRows(a) returns the number of rows in a 2D array a
+38) Function nColumns(a) returns the number of columns in a 2D array a
 
 Please note that an input that ends with : hiddes output from view.
 Please note that an input that starts with # is defined as text.  

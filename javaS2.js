@@ -70,7 +70,7 @@ function matrixMult(a, b) {
       }
     }
   }
-  return matrix(round(data));
+  return matrix(data);
 }
 
 // calculates the inverse of matrix m with gaussian elimination 
@@ -153,7 +153,7 @@ function matrixInv(m) {
     }
   }
   console.log(I);  // C should be the identity and matrix I should be the inverse:
-  return matrix(round(I, 2));
+  return matrix(I);
 }
 
 // creates an identity matrix with n number of rows and columns
@@ -306,4 +306,22 @@ function transpose(a) {
     }
   }
   return matrix(data);
+}
+
+// solves the least square equation Ax=b  with solution x = (A^T * A)^-1 * A^T * b 
+function LS(a,b){
+var aa = matrixInv(matrixMult(transpose(a),a));
+var bb = matrixMult(transpose(a),b);
+var x = matrixMult(aa,bb);
+return x ;
+}
+
+// Number of rows in an 2D Array
+function nRows(a){
+return a.length;
+}
+
+// Number of columns in an 2D Array
+function nColumns(a){
+return a[0].length;
 }
